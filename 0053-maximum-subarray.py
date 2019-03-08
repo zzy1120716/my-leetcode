@@ -14,7 +14,7 @@
 """
 
 
-# 动态规划
+# 方法一：动态规划就，O(n)
 # nums: [-2, 1, -3, 4, -1, 2, 1, -5, 4]
 # f:    [-2, 1, -2, 4,  3, 5, 6,  1, 5]
 class Solution:
@@ -45,5 +45,32 @@ class Solution1:
         return ans
 
 
+# 方法二：DC，O(nlogn)
+class Solution2:
+    def maxSubArray(self, nums) -> int:
+        return self.helper(nums, 0, len(nums) - 1)
+
+    def helper(self, nums, left, right):
+        if left > right:
+            return -(1 << 31) + 1
+        mid = (left + right) // 2
+
+        leftMax = sumNum = 0
+        for i in range(mid - 1, left - 1, -1):
+            sumNum += nums[i]
+            leftMax = max(leftMax, sumNum)
+
+        rightMax = sumNum = 0
+        for i in range(mid + 1, right + 1):
+            sumNum += nums[i]
+            rightMax = max(rightMax, sumNum)
+
+        leftAns = self.helper(nums, left, mid - 1)
+        rightAns = self.helper(nums, mid + 1, right)
+
+        return max(leftMax + nums[mid] + rightMax, max(leftAns, rightAns))
+
+
 if __name__ == '__main__':
-    print(Solution1().maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))
+    # 6
+    print(Solution2().maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))
