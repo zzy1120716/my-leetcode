@@ -21,7 +21,45 @@ A solution set is:
 """
 
 
-class Solution:
+# 方法一：枚举一个数后，将问题转化为3Sum，注意去重
+class Solution(object):
+    def fourSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[List[int]]
+        """
+        nums.sort()
+        results = []
+        for i in range(len(nums) - 3):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            self.threeSum(nums, i, results, target - nums[i])
+        return results
+
+    def threeSum(self, nums, index, results, three_sum):
+        for j in range(index + 1, len(nums) - 2):
+            if j != index + 1 and nums[j] == nums[j - 1]:
+                continue
+            two_sum = three_sum - nums[j]
+            left, right = j + 1, len(nums) - 1
+            while left < right:
+                if nums[left] + nums[right] == two_sum:
+                    results.append([nums[index], nums[j], nums[left], nums[right]])
+                    right -= 1
+                    left += 1
+                    while left < right and nums[left] == nums[left - 1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right + 1]:
+                        right -= 1
+                elif nums[left] + nums[right] > two_sum:
+                    right -= 1
+                else:
+                    left += 1
+
+
+# 方法二：DFS，有错误
+class Solution1:
     def fourSum(self, nums, target):
         results = []
         nums.sort()
