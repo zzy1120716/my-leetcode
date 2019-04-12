@@ -34,5 +34,34 @@ class Solution:
         return tmp[::-1]
 
 
+class Solution1:
+    def addBinary(self, a: str, b: str) -> str:
+        la = [int(d) for d in a]
+        lb = [int(d) for d in b]
+        res = []
+        len_a, len_b = len(a), len(b)
+        carry = 0
+        while len_a > 0 and len_b > 0:
+            da, db = la.pop(), lb.pop()
+            res.append((da + db + carry) % 2)
+            carry = (da + db + carry) // 2
+            len_a -= 1
+            len_b -= 1
+        while len_a > 0:
+            da = la.pop()
+            res.append((da + carry) % 2)
+            carry = (da + carry) // 2
+            len_a -= 1
+        while len_b > 0:
+            db = lb.pop()
+            res.append((db + carry) % 2)
+            carry = (db + carry) // 2
+            len_b -= 1
+        if carry:
+            res.append(carry)
+        return ''.join([str(c) for c in res])[::-1]
+
+
 if __name__ == '__main__':
-    print(Solution().addBinary('1010', '1011'))
+    # print(Solution1().addBinary('1010', '1011'))
+    print(Solution1().addBinary('11', '1'))
